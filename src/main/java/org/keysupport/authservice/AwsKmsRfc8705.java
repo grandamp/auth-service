@@ -114,7 +114,7 @@ public class AwsKmsRfc8705 {
     	            .subject(UUID.nameUUIDFromBytes("SERIALNUMBER=403611 + CN=Todd E. Johnson, OU=People, OU=Bureau of the Fiscal Service, OU=Department of the Treasury, O=U.S. Government, C=US".getBytes()).toString())
     	            .issuer("https://keysupport.net/")
     	            .audience("https://api.keysupport.org/")
-    	            .claim("acr", "http://idmanagement.gov/ns/assurance/ial/3/aal/3")
+    	            .claim("acr", "http://idmanagement.gov/ns/assurance/ial/3/aal/3/fal/3")
     	            .expirationTime(calendar.getTime())
     	            .notBeforeTime(dNow)
     	            .claim("cnf", cnf)
