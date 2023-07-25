@@ -6,6 +6,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.Provider;
 import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
@@ -73,6 +74,9 @@ public class KMSClient {
 		} catch (NoSuchAlgorithmException | CertificateException | IOException e) {
 			e.printStackTrace();
 		}
+        for (Provider.Service service: kmsProvider.getServices()) {
+            System.out.println(service.getType() + " : " + service.getAlgorithm());
+        }
         return keyStore;
     }
 
@@ -94,7 +98,7 @@ public class KMSClient {
 
     	// We can now RSA sign JWTs
     	SignedJWT jwt = new SignedJWT(
-    	            new JWSHeader.Builder(JWSAlgorithm.RS384).keyID(UUID.nameUUIDFromBytes(keyId.getBytes()).toString()).build(),
+    	            new JWSHeader.Builder(JWSAlgorithm.PS512).keyID(UUID.nameUUIDFromBytes(keyId.getBytes()).toString()).build(),
     	            new JWTClaimsSet.Builder()
     	            .subject(UUID.nameUUIDFromBytes("SERIALNUMBER=403611 + CN=Todd E. Johnson, OU=People, OU=Bureau of the Fiscal Service, OU=Department of the Treasury, O=U.S. Government, C=US".getBytes()).toString())
     	            .issuer("https://keysupport.net/")
