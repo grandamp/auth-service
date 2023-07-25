@@ -1,0 +1,32 @@
+server:
+  port: 9000
+
+logging:
+  level:
+    org.springframework.security: trace
+#    java.security.debug: certpath
+
+spring:
+  security:
+    oauth2:
+      authorizationserver:
+        client:
+          oidc-client:
+            registration:
+              client-id: "4492269c-1a8d-45fd-b90e-1e6289cdf506"
+              client-secret: "{noop}4492269c-1a8d-45fd-b90e-1e6289cdf506"
+              client-authentication-methods:
+                - "client_secret_basic"
+              authorization-grant-types:
+                - "authorization_code"
+                - "refresh_token"
+              redirect-uris:
+                - "https://oauthdebugger.com/debug"
+              post-logout-redirect-uris:
+                - "http://127.0.0.1:8080/"
+              scopes:
+                - "openid"
+                - "profile"
+            require-authorization-consent: false
+
+
