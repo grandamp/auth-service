@@ -93,7 +93,7 @@ public class AwsKmsRfc8705 {
     	 * # TODO: Add mock certificate validation service call:
     	 * 
     	 * - https://api.keysupport.org/swagger-ui/index.html
-    	 * - The requesting client *should* be able to indicate their choice of a certificate validation policy.
+    	 * - The requesting client *should* be able to indicate their choice of a certificate validation policy, based on the validation service implementation.
     	 * 
     	 * ## AAL3 Policy via reference validation service
     	 * 
@@ -172,6 +172,19 @@ public class AwsKmsRfc8705 {
     	 *     }
     	 *   ]
     	 * }
+    	 * 
+    	 * ## Intermediates for this policy, that could help build a hint list for mTLS
+    	 * 
+    	 * curl -X 'GET' \
+    	 *   'https://api.keysupport.org/vss/v2/intermediates/cc54e0ec-49da-333a-8150-2dd00b758b17' \
+    	 *   -H 'accept: application/json' \
+    	 *   | jq
+    	 * [
+    	 *   {
+    	 *     "x509Certificate": "MIIIoTCCBomgAwIBAgIQWtCVbROcZWNlJSfWCRdVhjANBgkqhkiG9w0BAQwFADBoMQswCQYDVQQGEwJVUzESMBAGA1UEChMJQ2VydGlQYXRoMSIwIAYDVQQLExlDZXJ0aWZpY2F0aW9uIEF1dGhvcml0aWVzMSEwHwYDVQQDExhDZXJ0aVBhdGggQnJpZGdlIENBIC0gRzMwHhcNMjMwMjIyMDAwMDAwWhcNMjQwMjI4MjM1OTU5WjCBizELMAkGA1UEBhMCQ0ExKzApBgNVBAoTIkNhcmlsbG9uIEluZm9ybWF0aW9uIFNlY3VyaXR5IEluYy4xIjAgBgNVBAsTGUNlcnRpZmljYXRpb24gQXV0aG9yaXRpZXMxKzApBgNVBAMTIkNhcmlsbG9uIFBLSSBTZXJ2aWNlcyBHMiBSb290IENBIDIwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQCy6NasC1HYr4qkVnZDW58WGBzfAxuron6i3ZhZJO89Z/drBw2EAFBWU/oG3Sj3JkUeHfvCRXuiBYB9bfCyJ/7pfxH3rRfeAKqBJqExSOly6J/1F8oSsrY6+zuTxV2wki0tWcCMHNT4QFqQ7TvNvcnh8UAGr5lCFtmChu0ihpUaPwZR1pRGVnXljVlz8iQ4hy2Pjo+1do8EXRf4xZRHkIKeI1hGZun5YorIynpBwV5214sEs/Mk2YDTb0vGpw1GWotfOut4ih0F6TDA/pUu49WOakuQASy38T1XAeglBnee3IPUi4dWCfKI+tbUtYSD5MXZtyGnCppAR4/K4gqroVfUV5WMdPZhZqU8Y38myg3bpslRd5eMteanAgxaKu1Q6T/7EoQOKAeQze2J3Pe85I8EOWSPVZcwLov1AQL1IhPW+L/ScpvQ0IK0pU1El2klNY7y/sTxxGQKclt8dQ2Cj3Uc5v1i9rNW+wvCm0JLlm22+tg6/hST4v/52McuNg7TRcFufjiANcNiqTPTijquJhsPUpO5W8hH7QSWs3gG/deweN7+3X8BCbA99aRvnAwCiCOOpeppt7dA/GHTRn+Z1MNJjAl2dOQO9LLMajXYEl8fA++EOzfUrpP8j4Yypu1B8z6b+5A6l4iFF1J1kP6Ua34Ckm67hUb3xYLlbd3gP/yl3QIDAQABo4IDITCCAx0wHQYDVR0OBBYEFP4BF6aKLnoK25nuD0uUgwSK3JGRMBIGA1UdEwEB/wQIMAYBAf8CAQEwgZsGA1UdIASBkzCBkDAOBgwrBgEEAYG7UwEBAQEwDgYMKwYBBAGBu1MBAQECMA4GDCsGAQQBgbtTAQEBBDAOBgwrBgEEAYG7UwEBAQUwDgYMKwYBBAGBu1MBAQEHMA4GDCsGAQQBgbtTAQEBCDAOBgwrBgEEAYG7UwEBAQkwDgYMKwYBBAGBu1MBAQEXMA4GDCsGAQQBgbtTAQEBGDBCBgNVHR8EOzA5MDegNaAzhjFodHRwOi8vY3JsLmNlcnRpcGF0aC5jb20vQ2VydGlQYXRoQnJpZGdlQ0EtRzMuY3JsMA4GA1UdDwEB/wQEAwIBBjAKBgNVHTYEAwIBADASBgNVHSQBAf8ECDAGgAEAgQEAMIIBEgYDVR0hBIIBCTCCAQUwGwYMKwYBBAGBu1MBAQEBBgsrBgEEAYHDXgMBCzAbBgwrBgEEAYG7UwEBAQIGCysGAQQBgcNeAwEMMBsGDCsGAQQBgbtTAQEBBAYLKwYBBAGBw14DAR4wGwYMKwYBBAGBu1MBAQEFBgsrBgEEAYHDXgMBHzAbBgwrBgEEAYG7UwEBAQcGCysGAQQBgcNeAwEUMBsGDCsGAQQBgbtTAQEBCAYLKwYBBAGBw14DARUwGwYMKwYBBAGBu1MBAQEJBgsrBgEEAYHDXgMBFjAbBgwrBgEEAYG7UwEBARcGCysGAQQBgcNeAwENMBsGDCsGAQQBgbtTAQEBGAYLKwYBBAGBw14DAQ4wUAYIKwYBBQUHAQsERDBCMEAGCCsGAQUFBzAFhjRodHRwOi8vcHViLmNhcmlsbG9uLmNhL0NBY2VydHMvSXNzdWVkQnlDSVNHMlJDQTIucDdjME0GCCsGAQUFBwEBBEEwPzA9BggrBgEFBQcwAoYxaHR0cDovL2FpYS5jZXJ0aXBhdGguY29tL0NlcnRpUGF0aEJyaWRnZUNBLUczLnA3YzAfBgNVHSMEGDAWgBR6izwGktweqNKCrBt0b3Q9TtGomzANBgkqhkiG9w0BAQwFAAOCAgEAvtWOBmcGVZPpdjNCYs3//f1m/UjxM6WlIo3ueJWRhUvQqSa4gMjN9SkJ80CIKv2BvXjNaH5ipmd6oeIZVQNY0j4BsJn9ZahXX6W2nPs2bL8tABF1qsgt3TiOPQV1z4ZFcmMdsJ1FWn0qUzIQHGugaoGaM4bEEHmddMb8JuR5+SlvtA7xT9pSD0PKkz+dljK2HdAOWBDq0WXYvNzlNkTFMf19qwU2nIeCM3d3nvIZ9izlYk9Rlwg49vL7C6f072dUd99JCkxdvFy/cI0W/JIVtmm9igr3qn4lY4Jhnbtx+OO/Lqq+LC+7nSWPxfq8rkYMjDDx7z1BsmzROZHl2ZrFRQcSvmPwhGK6o5EZ+chyDZYKiBAEQHE5U8ZNVIdwUP32YHqEWihprVv8Wwb6hhv3SLH19uhfOm2ZSShyZ0y0F/Yl32lhdfZ2tof2qVrl5NbsjtT6w5MX1j3iyu96BqX4ip03yRa+TmO+QXgrEhRtkXHbk0BWHRwATxky//IDLuEGOYvBv2eQJ2P1A0V3ohvolfBdogCSjTXYShk8cBwREYmdaFknQaEgqaWIaccv+xkzGYq1bTt4d9DmRUZKMuoPYAhlISoAmvwHmU1QjgqKa4SzLblJMTPC1Re0HIjazdQJgj8LwQwdnk98qcSTYyNTd0QsfoMNMVURtKspXJXhzsU="
+    	 *   },
+    	 *   {...}
+    	 * ]
     	 * 
     	 * ## Validation request using an example certificate
     	 * 
@@ -269,7 +282,7 @@ public class AwsKmsRfc8705 {
     	 * 
     	 * Use results to build an access token, preferably opaque using `DIR` with `A256GCM`
     	 * 
-    	 * For now, we will built a JWT, and use PS512 (with an RSA-4096 key) via AWS KMS
+    	 * For now, we will build a JWT, and use PS512 (with an RSA-4096 key) via AWS KMS
     	 */
     	
     	KeyStore hsmKeyStore = iniKms();
