@@ -183,9 +183,10 @@ public class AwsKmsRfc8705 {
     	 *     }
     	 *   }
     	 * }
+    	 * 
     	 * Use results to build an access token, preferably opaque using `DIR` with `A256GCM`
     	 * 
-    	 * For now, we will built a JWT and use PS384 with and RSA-1096 key via AWS KMS
+    	 * For now, we will built a JWT, and use PS512 (with an RSA-4096 key) via AWS KMS
     	 */
     	
     	KeyStore hsmKeyStore = iniKms();
